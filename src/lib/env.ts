@@ -23,11 +23,5 @@ export const ENV = {
 
   SITE_URL: process.env.NEXT_PUBLIC_SITE_URL ?? "https://app.nerinest.com",
 
-  // Web OAuth client ID for "Sign in with Google" (Google Identity Services).
-  // Not a secret — it's meant to be public, it just identifies which app is
-  // asking. Created in the Firebase console when Google is enabled as a
-  // sign-in provider (Authentication → Sign-in method → Google).
-  GOOGLE_CLIENT_ID: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? "",
-
   IS_DEV: process.env.NODE_ENV !== "production",
 } as const;
