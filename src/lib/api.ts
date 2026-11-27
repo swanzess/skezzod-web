@@ -1,5 +1,5 @@
 /**
- * Neri Haven (web) — API Service
+ * Nerinest (web) — API Service
  * All calls to the Cloud Run backend go through here.
  * No secrets in this file — the backend owns all keys.
  * Port of skezzod-app's src/services/api.ts.
@@ -77,7 +77,7 @@ function friendlyMessage(status: number): string {
   return "Something went wrong. Please try again.";
 }
 
-class NeriHavenAPI {
+class NerinestAPI {
   private baseUrl: string;
   private timeout = 30_000;
 
@@ -146,4 +146,4 @@ class NeriHavenAPI {
   }
 }
 
-export const api = new NeriHavenAPI();
+export const api = new NerinestAPI();

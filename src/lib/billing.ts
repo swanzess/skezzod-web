@@ -1,5 +1,5 @@
 /**
- * Neri Haven (web) — Billing Service
+ * Nerinest (web) — Billing Service
  *
  * Mobile app → backend → Stripe → webhook → backend → Firestore
  * This client NEVER calls Stripe directly; the secret key lives only on

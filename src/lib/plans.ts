@@ -1,5 +1,5 @@
 /**
- * Neri Haven Plan System (web)
+ * Nerinest Plan System (web)
  * Kept in sync by hand with skezzod-app's src/services/plans.ts — same
  * plan IDs, limits and Stripe price env vars, so both clients agree with
  * the backend about what each tier includes.

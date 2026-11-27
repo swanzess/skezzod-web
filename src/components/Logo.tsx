@@ -18,7 +18,7 @@ export function Logo({
   const img = (
     <Image
       src={src}
-      alt="Neri Haven"
+      alt="Nerinest"
       width={width}
       height={height}
       priority
@@ -28,7 +28,7 @@ export function Logo({
 
   if (!href) return img;
   return (
-    <Link href={href} aria-label="Neri Haven home">
+    <Link href={href} aria-label="Nerinest home">
       {img}
     </Link>
   );

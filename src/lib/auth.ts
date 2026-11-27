@@ -1,5 +1,5 @@
 /**
- * Neri Haven (web) — Auth Service
+ * Nerinest (web) — Auth Service
  * Firebase Identity Toolkit REST API — no SDK needed.
  * Direct port of skezzod-app's src/services/auth.ts so both clients use
  * the exact same backend contract.

@@ -6,8 +6,8 @@ import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: {
-    default: "Neri Haven — Protect your family from scams",
-    template: "%s — Neri Haven",
+    default: "Nerinest — Protect your family from scams",
+    template: "%s — Nerinest",
   },
   description:
     "Check any suspicious text, link, or call in seconds. AI-powered scam detection for you and your whole family.",

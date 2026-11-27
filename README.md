@@ -1,6 +1,6 @@
-# Neri Haven — Web
+# Nerinest — Web
 
-Standalone web app for Neri Haven — **separate from the mobile app**
+Standalone web app for Nerinest — **separate from the mobile app**
 (`skezzod-app`, React Native/Expo), built web-native with Next.js, and
 sharing the same backend (`skezzod-api`) and Firebase Auth project.
 
