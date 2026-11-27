@@ -1,26 +1,75 @@
 @import "tailwindcss";
+@import "@fontsource/playfair-display/700.css";
+@import "@fontsource/playfair-display/900.css";
+@import "@fontsource/montserrat/400.css";
+@import "@fontsource/montserrat/500.css";
+@import "@fontsource/montserrat/600.css";
+@import "@fontsource/montserrat/700.css";
+@import "@fontsource/montserrat/800.css";
+@import "@fontsource/pacifico/400.css";
 
 :root {
+  /* Neri Haven brand palette */
+  --nh-navy: #0f3b66;
+  --nh-blue: #4f8cc9;
+  --nh-teal: #3fb7b3;
+  --nh-purple: #a78bd6;
+  --nh-pink: #ff6bba;
+  --nh-gold: #ffb740;
+  --nh-cream: #f4efe9;
+  --nh-lavender: #dbdeeb;
+  --nh-charcoal: #2d2d2d;
+
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: var(--nh-charcoal);
 }
 
 @theme inline {
+  --color-nh-navy: var(--nh-navy);
+  --color-nh-blue: var(--nh-blue);
+  --color-nh-teal: var(--nh-teal);
+  --color-nh-purple: var(--nh-purple);
+  --color-nh-pink: var(--nh-pink);
+  --color-nh-gold: var(--nh-gold);
+  --color-nh-cream: var(--nh-cream);
+  --color-nh-lavender: var(--nh-lavender);
+  --color-nh-charcoal: var(--nh-charcoal);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-accent: "Pacifico", cursive;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+}
+
+.nh-gradient-text {
+  background: linear-gradient(
+    90deg,
+    var(--nh-teal) 0%,
+    var(--nh-blue) 24%,
+    var(--nh-purple) 50%,
+    var(--nh-pink) 75%,
+    var(--nh-gold) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.nh-gradient-bg {
+  background: linear-gradient(
+    90deg,
+    var(--nh-teal) 0%,
+    var(--nh-blue) 24%,
+    var(--nh-purple) 50%,
+    var(--nh-pink) 75%,
+    var(--nh-gold) 100%
+  );
 }

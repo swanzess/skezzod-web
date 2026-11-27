@@ -1,0 +1,73 @@
+name: Deploy
+
+# Builds the static Next.js export and deploys it to Firebase Hosting.
+#
+# Auth: same key-based approach as skezzod-app's deploy-web.yml, and the
+# same reasoning applies here — firebase-tools doesn't accept the
+# external_account credential Workload Identity Federation produces, so
+# this uses a service-account JSON key via the official
+# FirebaseExtended/action-hosting-deploy instead. firebase-hosting-sa
+# (skezzod-infra's iam.tf) holds only roles/firebasehosting.admin, so a
+# leaked key can push static content to Hosting and nothing else.
+#
+# Required repo secrets (this repo has its own secret store — copying the
+# same values from skezzod-app's secrets doesn't carry over automatically):
+#   FIREBASE_SERVICE_ACCOUNT_SKEZZOD_PROD — same JSON key already generated
+#     for skezzod-app's deploy-web.yml (firebase-hosting-sa). Reuse it:
+#     paste the same key contents as this repo's secret of the same name.
+#   NEXT_PUBLIC_API_URL                 — optional; falls back to the live Cloud Run URL
+#   NEXT_PUBLIC_FIREBASE_API_KEY
+#   NEXT_PUBLIC_FIREBASE_PROJECT_ID
+#   NEXT_PUBLIC_STRIPE_PRICE_PERSONAL
+#   NEXT_PUBLIC_STRIPE_PRICE_FAMILY
+#   NEXT_PUBLIC_STRIPE_PRICE_FAMILYPLUS
+#   NEXT_PUBLIC_SITE_URL                 — e.g. https://app.nerihaven.com
+#
+# This deploys to the SAME Firebase Hosting site (skezzod-prod's default
+# site) that skezzod-app's deploy-web.yml used to own. That workflow has
+# been disabled (see skezzod-app's deploy-web.yml header) so the two don't
+# overwrite each other.
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build static export
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
+          NEXT_PUBLIC_STRIPE_PRICE_PERSONAL: ${{ secrets.NEXT_PUBLIC_STRIPE_PRICE_PERSONAL }}
+          NEXT_PUBLIC_STRIPE_PRICE_FAMILY: ${{ secrets.NEXT_PUBLIC_STRIPE_PRICE_FAMILY }}
+          NEXT_PUBLIC_STRIPE_PRICE_FAMILYPLUS: ${{ secrets.NEXT_PUBLIC_STRIPE_PRICE_FAMILYPLUS }}
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SKEZZOD_PROD }}
+          projectId: skezzod-prod
+          channelId: live

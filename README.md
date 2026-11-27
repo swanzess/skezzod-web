@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Neri Haven — Web
 
-## Getting Started
+Standalone web app for Neri Haven — **separate from the mobile app**
+(`skezzod-app`, React Native/Expo), built web-native with Next.js, and
+sharing the same backend (`skezzod-api`) and Firebase Auth project.
 
-First, run the development server:
+## Why a separate codebase
+
+The web experience used to be the mobile app's Expo web export, reused
+as-is. That worked but looked and felt like a mobile screen stretched into
+a browser. This repo replaces it with a real website: a proper marketing
+home page plus a lightweight client app (sign up/in, the scam checker,
+pricing/checkout, account) built with web-native layout and navigation —
+no React Native involved.
+
+## Stack
+
+- **Next.js** (App Router), statically exported (`output: "export"`) — this
+  is a client-only SPA, there's no Next.js server in production
+- **TypeScript + Tailwind CSS v4**
+- **Firebase Identity Toolkit REST API** for auth (same contract as
+  `skezzod-app/src/services/auth.ts` — no Firebase SDK, just `fetch`)
+- **Stripe Checkout** via `skezzod-api` — this client never talks to Stripe
+  directly; it only ever gets a hosted checkout URL back from the backend
+- Brand fonts (Playfair Display, Montserrat, Pacifico) self-hosted via
+  `@fontsource/*` — no runtime calls to Google Fonts
+
+## Local development
 
 ```bash
+npm install
+cp .env.example .env.local   # fill in the Firebase/Stripe values
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Deploy
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+`.github/workflows/deploy.yml` builds the static export and deploys it to
+Firebase Hosting (the same `skezzod-prod` default site that used to be
+served by `skezzod-app`'s web export — that workflow is now disabled, see
+its header comment). See the workflow file for the full list of required
+repo secrets.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project layout
 
-## Learn More
+```
+src/
+  app/            — routes (home, pricing, signup, signin, check, dashboard, account, …)
+  components/      — Navbar, Footer, Logo, PricingCard, VerdictCard, icons
+  context/         — AuthContext (session state)
+  lib/             — env, auth, api, billing, plans — ports of skezzod-app's
+                      src/services/* so both clients agree with the backend
+```
 
-To learn more about Next.js, take a look at the following resources:
+## What's here vs. what's next
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Shipped: marketing home, pricing, sign up/in/forgot-password, the core
+scam checker (`/check`), Stripe checkout, a basic dashboard and account
+page. Not yet ported from the mobile app: Family management, Learn
+lessons, the full Scam Playbook, and Intel trend charts — the mobile app
+remains the full-featured client until those land here too.

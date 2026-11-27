@@ -1,69 +1,133 @@
+import Link from "next/link";
 import Image from "next/image";
+import { PLAN_LIST } from "@/lib/plans";
+import { PricingCard } from "@/components/PricingCard";
+import { IconSearch, IconPeople, IconBrain, IconChart } from "@/components/icons";
 
-export default function Home() {
+const FEATURES = [
+  {
+    Icon: IconSearch,
+    title: "Instant checks",
+    text: "Paste any suspicious text, link, or call transcript and get a verdict in seconds.",
+  },
+  {
+    Icon: IconPeople,
+    title: "Whole-family protection",
+    text: "Add parents, grandparents, and kids to one account and watch over everyone at once.",
+  },
+  {
+    Icon: IconBrain,
+    title: "AI-powered detection",
+    text: "Trained on thousands of real scam patterns, updated continuously as new ones emerge.",
+  },
+  {
+    Icon: IconChart,
+    title: "Live community intel",
+    text: "See what scams are trending this week, sourced from real checks across the community.",
+  },
+];
+
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
+    <div>
+      {/* Hero */}
+      <section className="bg-nh-navy">
+        <div className="mx-auto flex max-w-5xl flex-col items-center px-5 pb-20 pt-20 text-center sm:pt-28">
+          <Image
+            src="/brand/wordmark-white.png"
+            alt="Neri Haven"
+            width={420}
+            height={115}
+            priority
+            className="h-[70px] w-auto sm:h-[90px]"
+          />
+          <h1 className="mt-8 max-w-3xl font-display text-4xl font-bold text-white sm:text-5xl">
+            Protect yourself and your family from scams
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+          <p className="mt-5 max-w-xl text-lg text-white/70">
+            Check any suspicious text, link, or call instantly. Free to start — no credit card required.
+          </p>
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <Link
+              href="/signup"
+              className="rounded-full bg-white px-7 py-3.5 text-sm font-bold text-nh-navy transition hover:bg-nh-cream"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              Get protected — it&apos;s free
+            </Link>
+            <Link
+              href="/check"
+              className="rounded-full border border-white/30 px-7 py-3.5 text-sm font-bold text-white transition hover:bg-white/10"
             >
-              Learning
-            </a>{" "}
-            center.
+              Try a check
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Features */}
+      <section id="features" className="mx-auto max-w-6xl px-5 py-20">
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="font-display text-3xl font-bold text-nh-navy sm:text-4xl">
+            Everything you need to stay a step ahead
+          </h2>
+          <p className="mt-4 text-nh-charcoal/70">
+            Built for the whole family — from the first scam text to a lifetime of safer logins.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {FEATURES.map(({ Icon, title, text }) => (
+            <div key={title} className="rounded-2xl border border-nh-lavender/70 p-6">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-nh-lavender/40">
+                <Icon />
+              </div>
+              <h3 className="mt-4 font-bold text-nh-charcoal">{title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-nh-charcoal/65">{text}</p>
+            </div>
+          ))}
         </div>
-      </main>
+      </section>
+
+      {/* Gradient divider band */}
+      <section className="mx-auto max-w-6xl px-5">
+        <div className="h-px w-full nh-gradient-bg opacity-60" />
+      </section>
+
+      {/* Pricing teaser */}
+      <section className="mx-auto max-w-6xl px-5 py-20">
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="font-display text-3xl font-bold text-nh-navy sm:text-4xl">
+            Simple plans for every household
+          </h2>
+          <p className="mt-4 text-nh-charcoal/70">
+            Start free. Upgrade any time — every paid plan includes a 7-day trial.
+          </p>
+        </div>
+
+        <div className="mt-14 grid gap-6 lg:grid-cols-4">
+          {PLAN_LIST.map((plan) => (
+            <PricingCard key={plan.id} plan={plan} />
+          ))}
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="bg-nh-cream">
+        <div className="mx-auto flex max-w-3xl flex-col items-center px-5 py-20 text-center">
+          <h2 className="font-display text-3xl font-bold text-nh-navy sm:text-4xl">
+            Scams move fast. So should you.
+          </h2>
+          <p className="mt-4 text-nh-charcoal/70">
+            Join Neri Haven today — free forever on the basics, upgrade when you need more.
+          </p>
+          <Link
+            href="/signup"
+            className="mt-8 rounded-full bg-nh-navy px-8 py-3.5 text-sm font-bold text-white transition hover:bg-nh-navy/90"
+          >
+            Get protected — it&apos;s free
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }
