@@ -5,10 +5,11 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { billingService } from "@/lib/billing";
 import { PLANS, isPaid } from "@/lib/plans";
+import { TwoFactorSettings } from "@/components/TwoFactorSettings";
 
 export default function AccountPage() {
   const router = useRouter();
-  const { user, loading, signOut } = useAuth();
+  const { user, loading, signOut, refreshProfile } = useAuth();
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -72,6 +73,13 @@ export default function AccountPage() {
               Upgrade plan
             </a>
           )}
+        </div>
+      </div>
+
+      <div className="mt-6 rounded-2xl border border-nh-lavender/70 p-6">
+        <p className="text-xs font-bold uppercase tracking-wide text-nh-charcoal/50">Two-factor authentication</p>
+        <div className="mt-3">
+          <TwoFactorSettings enabled={user.totpEnabled} onChanged={() => void refreshProfile()} />
         </div>
       </div>
 

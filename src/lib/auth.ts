@@ -17,6 +17,7 @@ export interface SkezzodUser {
   plan: "free" | "personal" | "family" | "familyplus";
   guardScore: number;
   joinedAt: string;
+  totpEnabled: boolean;
 }
 
 function friendlyError(msg: string): string {
@@ -27,6 +28,7 @@ function friendlyError(msg: string): string {
   if (msg.includes("INVALID_EMAIL")) return "Please enter a valid email address.";
   if (msg.includes("TOO_MANY_ATTEMPTS")) return "Too many attempts. Please try again later.";
   if (msg.includes("WEAK_PASSWORD")) return "Password must be at least 6 characters.";
+  if (msg.includes("INVALID_IDP_RESPONSE")) return "Google sign-in didn't go through. Please try again.";
   return "Something went wrong. Please try again.";
 }
 
@@ -107,6 +109,7 @@ export const authService = {
         plan: d.plan ?? "free",
         guardScore: d.guard_score ?? 50,
         joinedAt: d.joined_at ?? new Date().toISOString(),
+        totpEnabled: Boolean(d.totp_enabled),
       };
     } else {
       try {
@@ -135,6 +138,55 @@ export const authService = {
     };
   },
 
+  /**
+   * Google sign-in/sign-up. `googleIdToken` is the JWT credential Google
+   * Identity Services hands back in its callback (see GoogleSignInButton) —
+   * exchanged here for Firebase tokens via Identity Toolkit's generic
+   * federated-identity endpoint, no Firebase SDK needed. Works for both a
+   * brand-new account and a returning one; Firebase tells us which via
+   * `isNewUser`, and only a new one needs our backend /auth/register call
+   * (a returning one already has a Firestore profile).
+   */
+  async signInWithGoogle(googleIdToken: string) {
+    const fb = await fbRequest("signInWithIdp", {
+      requestUri: typeof window !== "undefined" ? window.location.origin : ENV.SITE_URL,
+      postBody: `id_token=${encodeURIComponent(googleIdToken)}&providerId=google.com`,
+      returnIdpCredential: true,
+    });
+
+    let user: SkezzodUser;
+    if (fb.isNewUser) {
+      const res = await fetch(`${API}/api/v1/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${fb.idToken}` },
+        body: JSON.stringify({ display_name: fb.displayName || fb.email || "Nerinest User", plan: "free" }),
+      });
+      if (res.ok) {
+        const d = await res.json();
+        user = {
+          id: d.id,
+          name: d.name,
+          email: d.email,
+          plan: d.plan ?? "free",
+          guardScore: d.guard_score ?? 50,
+          joinedAt: d.joined_at ?? new Date().toISOString(),
+          totpEnabled: Boolean(d.totp_enabled),
+        };
+      } else {
+        user = await authService.getProfile(fb.idToken as string);
+      }
+    } else {
+      user = await authService.getProfile(fb.idToken as string);
+    }
+
+    return {
+      token: fb.idToken as string,
+      refreshToken: fb.refreshToken as string | undefined,
+      expiresIn: Number(fb.expiresIn) || 3600,
+      user,
+    };
+  },
+
   async getProfile(token: string): Promise<SkezzodUser> {
     const res = await fetch(`${API}/api/v1/auth/profile`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -149,6 +201,7 @@ export const authService = {
       plan: d.plan ?? "free",
       guardScore: d.guard_score ?? 50,
       joinedAt: d.joined_at ?? new Date().toISOString(),
+      totpEnabled: Boolean(d.totp_enabled),
     };
   },
 
