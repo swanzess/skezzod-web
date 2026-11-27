@@ -22,6 +22,7 @@ name: Deploy
 #   NEXT_PUBLIC_STRIPE_PRICE_FAMILY
 #   NEXT_PUBLIC_STRIPE_PRICE_FAMILYPLUS
 #   NEXT_PUBLIC_SITE_URL                 — e.g. https://app.nerihaven.com
+#   NEXT_PUBLIC_GOOGLE_CLIENT_ID          — optional; blank hides the Google button (see .env.example)
 #
 # This deploys to the SAME Firebase Hosting site (skezzod-prod's default
 # site) that skezzod-app's deploy-web.yml used to own. That workflow has
@@ -63,6 +64,7 @@ jobs:
           NEXT_PUBLIC_STRIPE_PRICE_FAMILY: ${{ secrets.NEXT_PUBLIC_STRIPE_PRICE_FAMILY }}
           NEXT_PUBLIC_STRIPE_PRICE_FAMILYPLUS: ${{ secrets.NEXT_PUBLIC_STRIPE_PRICE_FAMILYPLUS }}
           NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+          NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}
 
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0

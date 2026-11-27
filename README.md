@@ -19,7 +19,13 @@ no React Native involved.
   is a client-only SPA, there's no Next.js server in production
 - **TypeScript + Tailwind CSS v4**
 - **Firebase Identity Toolkit REST API** for auth (same contract as
-  `skezzod-app/src/services/auth.ts` — no Firebase SDK, just `fetch`)
+  `skezzod-app/src/services/auth.ts` — no Firebase SDK, just `fetch`),
+  plus **Sign in with Google** (Google Identity Services script, exchanged
+  for Firebase tokens via Identity Toolkit — see `src/components/GoogleSignInButton.tsx`)
+- **Two-factor authentication** (authenticator-app TOTP, not Firebase's paid
+  Identity Platform MFA) via skezzod-api's `/auth/2fa/*` endpoints — checked
+  once at sign-in, with backup codes. See `src/lib/twofa.ts`,
+  `src/components/TwoFactorSettings.tsx` and `src/components/TwoFactorPrompt.tsx`
 - **Stripe Checkout** via `skezzod-api` — this client never talks to Stripe
   directly; it only ever gets a hosted checkout URL back from the backend
 - Brand fonts (Playfair Display, Montserrat, Pacifico) self-hosted via

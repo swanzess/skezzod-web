@@ -4,10 +4,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
+import { GoogleSignInButton } from "@/components/GoogleSignInButton";
+import { TwoFactorPrompt } from "@/components/TwoFactorPrompt";
 
 export default function SignInPage() {
   const router = useRouter();
-  const { signIn } = useAuth();
+  const { signIn, signInWithGoogle, twoFactorPending } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,12 +21,30 @@ export default function SignInPage() {
     setError(null);
     setBusy(true);
     try {
-      await signIn(email.trim(), password);
-      router.push("/dashboard");
+      const result = await signIn(email.trim(), password);
+      if (!result.twoFactorRequired) router.push("/dashboard");
+      setBusy(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
       setBusy(false);
     }
+  }
+
+  async function onGoogleToken(idToken: string) {
+    setError(null);
+    setBusy(true);
+    try {
+      const result = await signInWithGoogle(idToken);
+      if (!result.twoFactorRequired) router.push("/dashboard");
+      setBusy(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+      setBusy(false);
+    }
+  }
+
+  if (twoFactorPending) {
+    return <TwoFactorPrompt onDone={() => router.push("/dashboard")} />;
   }
 
   return (
@@ -32,7 +52,17 @@ export default function SignInPage() {
       <h1 className="font-display text-3xl font-bold text-nh-navy">Welcome back</h1>
       <p className="mt-2 text-sm text-nh-charcoal/60">Sign in to check a message or manage your family.</p>
 
-      <form onSubmit={onSubmit} className="mt-8 flex flex-col gap-4">
+      <div className="mt-8">
+        <GoogleSignInButton text="signin_with" onIdToken={onGoogleToken} />
+      </div>
+
+      <div className="my-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-wide text-nh-charcoal/40">
+        <span className="h-px flex-1 bg-nh-lavender/70" />
+        or
+        <span className="h-px flex-1 bg-nh-lavender/70" />
+      </div>
+
+      <form onSubmit={onSubmit} className="flex flex-col gap-4">
         <label className="flex flex-col gap-1.5 text-sm font-semibold text-nh-charcoal">
           Email
           <input

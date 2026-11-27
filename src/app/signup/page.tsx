@@ -5,12 +5,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { billingService } from "@/lib/billing";
+import { GoogleSignInButton } from "@/components/GoogleSignInButton";
+import { TwoFactorPrompt } from "@/components/TwoFactorPrompt";
 import { PlanId } from "@/lib/plans";
 
 function SignUpForm() {
   const router = useRouter();
   const params = useSearchParams();
-  const { signUp } = useAuth();
+  const { signUp, signInWithGoogle, twoFactorPending } = useAuth();
   const planParam = (params.get("plan") as PlanId | null) ?? "free";
 
   const [name, setName] = useState("");
@@ -19,21 +21,43 @@ function SignUpForm() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
+  async function afterAuth() {
+    if (planParam !== "free") {
+      await billingService.startCheckout(planParam);
+      return; // navigates away to Stripe
+    }
+    router.push("/dashboard");
+  }
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setBusy(true);
     try {
-      await signUp(name.trim(), email.trim(), password, planParam);
-      if (planParam !== "free") {
-        await billingService.startCheckout(planParam);
-        return; // navigates away to Stripe
-      }
-      router.push("/dashboard");
+      const result = await signUp(name.trim(), email.trim(), password, planParam);
+      if (!result.twoFactorRequired) await afterAuth();
+      else setBusy(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
       setBusy(false);
     }
+  }
+
+  async function onGoogleToken(idToken: string) {
+    setError(null);
+    setBusy(true);
+    try {
+      const result = await signInWithGoogle(idToken);
+      if (!result.twoFactorRequired) await afterAuth();
+      else setBusy(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+      setBusy(false);
+    }
+  }
+
+  if (twoFactorPending) {
+    return <TwoFactorPrompt onDone={() => void afterAuth()} />;
   }
 
   return (
@@ -45,7 +69,17 @@ function SignUpForm() {
           : `Starting your ${planParam} plan — you'll set up payment next.`}
       </p>
 
-      <form onSubmit={onSubmit} className="mt-8 flex flex-col gap-4">
+      <div className="mt-8">
+        <GoogleSignInButton text="signup_with" onIdToken={onGoogleToken} />
+      </div>
+
+      <div className="my-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-wide text-nh-charcoal/40">
+        <span className="h-px flex-1 bg-nh-lavender/70" />
+        or
+        <span className="h-px flex-1 bg-nh-lavender/70" />
+      </div>
+
+      <form onSubmit={onSubmit} className="flex flex-col gap-4">
         <label className="flex flex-col gap-1.5 text-sm font-semibold text-nh-charcoal">
           Name
           <input
