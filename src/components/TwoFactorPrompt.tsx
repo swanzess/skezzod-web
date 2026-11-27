@@ -31,7 +31,7 @@ export function TwoFactorPrompt({ onDone }: { onDone: () => void }) {
     <div className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-5 py-16">
       <h1 className="font-display text-3xl font-bold text-nh-navy">Enter your code</h1>
       <p className="mt-2 text-sm text-nh-charcoal/60">
-        Open your authenticator app and enter the 6-digit code for Neri Haven — or one of your backup codes.
+        Open your authenticator app and enter the 6-digit code for Nerinest — or one of your backup codes.
       </p>
 
       <form onSubmit={onSubmit} className="mt-8 flex flex-col gap-4">

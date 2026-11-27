@@ -33,7 +33,7 @@ export function Footer() {
         </div>
 
         <div className="mt-10 flex flex-col gap-2 border-t border-nh-charcoal/10 pt-6 text-xs text-nh-charcoal/50 sm:flex-row sm:items-center sm:justify-between">
-          <span>© {new Date().getFullYear()} Neri Haven. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} Nerinest. All rights reserved.</span>
           <span>Free plan includes 5 checks per day. No credit card required.</span>
         </div>
       </div>

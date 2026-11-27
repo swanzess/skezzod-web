@@ -1,5 +1,5 @@
 /**
- * Neri Haven (web) — Auth Service
+ * Nerinest (web) — Auth Service
  * Firebase Identity Toolkit REST API — no SDK needed.
  * Direct port of skezzod-app's src/services/auth.ts so both clients use
  * the exact same backend contract.
@@ -159,7 +159,7 @@ export const authService = {
       const res = await fetch(`${API}/api/v1/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${fb.idToken}` },
-        body: JSON.stringify({ display_name: fb.displayName || fb.email || "Neri Haven User", plan: "free" }),
+        body: JSON.stringify({ display_name: fb.displayName || fb.email || "Nerinest User", plan: "free" }),
       });
       if (res.ok) {
         const d = await res.json();

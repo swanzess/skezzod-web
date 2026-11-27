@@ -35,7 +35,7 @@ export default function HomePage() {
         <div className="mx-auto flex max-w-5xl flex-col items-center px-5 pb-20 pt-20 text-center sm:pt-28">
           <Image
             src="/brand/wordmark-white.png"
-            alt="Neri Haven"
+            alt="Nerinest"
             width={420}
             height={115}
             priority
@@ -118,7 +118,7 @@ export default function HomePage() {
             Scams move fast. So should you.
           </h2>
           <p className="mt-4 text-nh-charcoal/70">
-            Join Neri Haven today — free forever on the basics, upgrade when you need more.
+            Join Nerinest today — free forever on the basics, upgrade when you need more.
           </p>
           <Link
             href="/signup"

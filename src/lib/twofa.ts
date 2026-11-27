@@ -1,5 +1,5 @@
 /**
- * Neri Haven (web) — Two-Factor Authentication (TOTP)
+ * Nerinest (web) — Two-Factor Authentication (TOTP)
  * Talks to skezzod-api's /api/v1/auth/2fa/* endpoints directly (not Firebase —
  * this is our own app-level 2FA, checked once per sign-in, not per request).
  */

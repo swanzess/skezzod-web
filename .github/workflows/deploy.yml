@@ -21,7 +21,7 @@ name: Deploy
 #   NEXT_PUBLIC_STRIPE_PRICE_PERSONAL
 #   NEXT_PUBLIC_STRIPE_PRICE_FAMILY
 #   NEXT_PUBLIC_STRIPE_PRICE_FAMILYPLUS
-#   NEXT_PUBLIC_SITE_URL                 — e.g. https://app.nerihaven.com
+#   NEXT_PUBLIC_SITE_URL                 — e.g. https://app.nerinest.com
 #   NEXT_PUBLIC_GOOGLE_CLIENT_ID          — optional; blank hides the Google button (see .env.example)
 #
 # This deploys to the SAME Firebase Hosting site (skezzod-prod's default

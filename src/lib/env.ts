@@ -1,5 +1,5 @@
 /**
- * Neri Haven (web) — Environment Configuration
+ * Nerinest (web) — Environment Configuration
  * NEXT_PUBLIC_ vars are bundled into the client build — never put secrets here.
  * Mirrors skezzod-app's src/services/env.ts so both clients talk to the
  * same backend the same way.
@@ -21,7 +21,7 @@ export const ENV = {
   STRIPE_PRICE_FAMILYPLUS:
     process.env.NEXT_PUBLIC_STRIPE_PRICE_FAMILYPLUS ?? "",
 
-  SITE_URL: process.env.NEXT_PUBLIC_SITE_URL ?? "https://app.nerihaven.com",
+  SITE_URL: process.env.NEXT_PUBLIC_SITE_URL ?? "https://app.nerinest.com",
 
   // Web OAuth client ID for "Sign in with Google" (Google Identity Services).
   // Not a secret — it's meant to be public, it just identifies which app is
